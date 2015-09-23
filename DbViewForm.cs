@@ -7,7 +7,7 @@ namespace JqpdDecode
     {
         private int startPos = 0;
         private int totalSize = 0;
-        private const int itemsPerPage = 50;
+        private const int itemsPerPage = 20;
         public DbViewForm()
         {
             InitializeComponent();
@@ -35,7 +35,7 @@ namespace JqpdDecode
 
         private void DisplayItems()
         {
-            int i = 0;           
+            int i = startPos;           
             SQLiteDataReader reader;
             dataTable.Items.Clear();
             SQLiteCommand command = Decode_Form.dataBase.CreateCommand();
@@ -84,11 +84,6 @@ namespace JqpdDecode
             return size;
         }
 
-        private void DataTable_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void clear_Click(object sender, EventArgs e)
         {
             if(totalSize == 0)
@@ -134,6 +129,25 @@ namespace JqpdDecode
             }
             startPos += itemsPerPage;
             DisplayItems();
+        }
+
+        private void firstPage_Click(object sender, EventArgs e)
+        {
+            if(totalSize > 0)
+            {
+                startPos = 0;
+                DisplayItems();
+            }          
+        }
+
+        private void lastPage_Click(object sender, EventArgs e)
+        {
+            if(totalSize > 0)
+            {
+                int r = totalSize%itemsPerPage;
+                startPos = (r == 0 ? totalSize - itemsPerPage : totalSize/itemsPerPage*itemsPerPage);
+                DisplayItems();
+            }
         }
     }
 }

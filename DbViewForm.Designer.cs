@@ -32,6 +32,8 @@
             this.clearRecord = new System.Windows.Forms.Button();
             this.prevPage = new System.Windows.Forms.Button();
             this.nextPage = new System.Windows.Forms.Button();
+            this.firstPage = new System.Windows.Forms.Button();
+            this.lastPage = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // dataTable
@@ -43,11 +45,10 @@
             this.dataTable.Size = new System.Drawing.Size(609, 527);
             this.dataTable.TabIndex = 0;
             this.dataTable.UseCompatibleStateImageBehavior = false;
-            this.dataTable.SelectedIndexChanged += new System.EventHandler(this.DataTable_SelectedIndexChanged);
             // 
             // clearRecord
             // 
-            this.clearRecord.Location = new System.Drawing.Point(46, 11);
+            this.clearRecord.Location = new System.Drawing.Point(17, 11);
             this.clearRecord.Name = "clearRecord";
             this.clearRecord.Size = new System.Drawing.Size(104, 43);
             this.clearRecord.TabIndex = 1;
@@ -57,7 +58,7 @@
             // 
             // prevPage
             // 
-            this.prevPage.Location = new System.Drawing.Point(282, 12);
+            this.prevPage.Location = new System.Drawing.Point(408, 11);
             this.prevPage.Name = "prevPage";
             this.prevPage.Size = new System.Drawing.Size(84, 44);
             this.prevPage.TabIndex = 2;
@@ -67,7 +68,7 @@
             // 
             // nextPage
             // 
-            this.nextPage.Location = new System.Drawing.Point(485, 12);
+            this.nextPage.Location = new System.Drawing.Point(505, 12);
             this.nextPage.Name = "nextPage";
             this.nextPage.Size = new System.Drawing.Size(81, 43);
             this.nextPage.TabIndex = 3;
@@ -75,12 +76,34 @@
             this.nextPage.UseVisualStyleBackColor = true;
             this.nextPage.Click += new System.EventHandler(this.nextPage_Click);
             // 
+            // firstPage
+            // 
+            this.firstPage.Location = new System.Drawing.Point(151, 11);
+            this.firstPage.Name = "firstPage";
+            this.firstPage.Size = new System.Drawing.Size(84, 44);
+            this.firstPage.TabIndex = 2;
+            this.firstPage.Text = "第一页";
+            this.firstPage.UseVisualStyleBackColor = true;
+            this.firstPage.Click += new System.EventHandler(this.firstPage_Click);
+            // 
+            // lastPage
+            // 
+            this.lastPage.Location = new System.Drawing.Point(249, 11);
+            this.lastPage.Name = "lastPage";
+            this.lastPage.Size = new System.Drawing.Size(97, 44);
+            this.lastPage.TabIndex = 2;
+            this.lastPage.Text = "最后一页";
+            this.lastPage.UseVisualStyleBackColor = true;
+            this.lastPage.Click += new System.EventHandler(this.lastPage_Click);
+            // 
             // DbViewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(616, 464);
             this.Controls.Add(this.nextPage);
+            this.Controls.Add(this.lastPage);
+            this.Controls.Add(this.firstPage);
             this.Controls.Add(this.prevPage);
             this.Controls.Add(this.clearRecord);
             this.Controls.Add(this.dataTable);
@@ -98,5 +121,7 @@
         private System.Windows.Forms.Button clearRecord;
         private System.Windows.Forms.Button prevPage;
         private System.Windows.Forms.Button nextPage;
+        private System.Windows.Forms.Button firstPage;
+        private System.Windows.Forms.Button lastPage;
     }
 }

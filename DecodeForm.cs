@@ -5,10 +5,8 @@ namespace JqpdDecode
 {
     public partial class Decode_Form : Form
     {
-        private static int lineNumber = 100;
-        private int[] ln = new int[3] { lineNumber / 100, lineNumber / 10 % 10, lineNumber % 10 };
-        private static int machineNumber = 123;
-        private int[] mn = new int[3] { machineNumber / 100, machineNumber / 10 % 10, machineNumber % 10 };
+        private Timer passwordTimer;
+        private const int MaxFigure3 = 999;
         private string[] options = new string[]
         {
             "保持现状",
@@ -26,7 +24,7 @@ namespace JqpdDecode
         private int newLineNumber = 0;
         private int newMachineNumber = 0;
         private int optionIndex = 0;
-        private uint passwordV = 0;
+        private uint passwordBase = 0;
         private const int CodeFlag = 20131202;
         private SQLiteCommand command;
         public static SQLiteConnection dataBase;
@@ -34,57 +32,89 @@ namespace JqpdDecode
         {
             try
             {
-                string tempString = "insert into jqpd values(datetime('now','localtime'),";
-                command.CommandText = tempString + reportLineNumber + "," +
-                    reportMachineNumber + "," +
-                    reportProfit + "," +
-                    reportLockCount + ");";
-                command.ExecuteNonQuery();
+                InsertRecord();
             }
             catch(SQLiteException sqlex)
             {
                 command.CommandText = "create table jqpd(time text,ln int,mn int,profit int,lockCount int);";
                 command.ExecuteNonQuery();
+                InsertRecord();
+            }
+        }
 
-                string tempString = "insert into jqpd values(datetime('now','localtime'),";
-                command.CommandText = tempString + lineNumber + "," +
-                    reportMachineNumber + "," +
-                    reportProfit + "," +
-                    reportLockCount + ");";
+        bool RecordExist(int ln,int mn,int profit,int count)
+        {        
+            SQLiteDataReader reader;
+            command.CommandText = "select count(*) from jqpd where ";
+            command.CommandText += "ln = " + ln + " AND ";
+            command.CommandText += "mn = " + mn + " AND ";
+            command.CommandText += "profit = " + profit + " AND ";
+            command.CommandText += "lockCount = " + count + ";";
+            try
+            {
+                reader = command.ExecuteReader();
+                if(reader.Read())
+                {
+                    return reader.GetInt32(0) > 0;
+                }
+            }
+            catch(SQLiteException sqlex)
+            {
+                command.CommandText = "create table jqpd(time text,ln int,mn int,profit int,lockCount int);";
                 command.ExecuteNonQuery();
             }
+            return false;
+        }
+
+        private void InsertRecord()
+        {
+            string tempString = "insert into jqpd values(datetime('now','localtime'),";
+            command.CommandText = tempString + reportLineNumber + "," +
+                reportMachineNumber + "," +
+                reportProfit + "," +
+                reportLockCount + ");";
+            command.ExecuteNonQuery();
         }
 
         public Decode_Form()
         {
-            InitializeComponent();          
+            InitializeComponent();
+            passwordTimer = new Timer();
+            passwordTimer.Interval = 6000;
+            passwordTimer.Tick += new EventHandler(PasswordTimeOver);
+        }
+    
+        private void PasswordTimeOver(object sender, EventArgs e)
+        {
+            passwordTimer.Stop();
+            labelPassword.Text = "";
         }
 
-        private void TxForm_Load(object sender, EventArgs e)
+        private void DecodeForm_Load(object sender, EventArgs e)
         {
-            optionString.Text = options[0];
-            optionLnMn.Text = "";
+            optionString.Text = options[optionIndex];
+            newLnMnTB.Text = "";
             dataBase = new SQLiteConnection("Data Source = decode.db");
             dataBase.Open();
             command = dataBase.CreateCommand();
         }
 
-        private void AllLabels_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void DoDecode_Click(object sender, EventArgs e)
         {
-            if(reportLineNumber != lineNumber)
+            if(lineNumberTB.Text == "" || profitTB.Text == "" || machineNumTB.Text == "" ||
+                lockCountTB.Text == "" || chkCodeTB.Text == "")
             {
-                MessageBox.Show("线号不一致，请检查数据!");
+                MessageBox.Show("部分数据空白，请输入!");
                 return;
             }
-            int mnHigh = reportMachineNumber / 100000;
-            if(mnHigh != machineNumber)
+            if(reportLineNumber < 0 || reportLineNumber > MaxFigure3)
             {
-                MessageBox.Show("机台号码高3位不一致，请检查数据!");
+                MessageBox.Show("输入的线号无效，请检查数据!");
+                return;
+            }
+            if(reportMachineNumber < 0 || reportMachineNumber > 99999999)
+            {
+                MessageBox.Show("机台号码无效，请检查数据!");
                 return;
             }
             if(reportProfit < 0)
@@ -111,49 +141,51 @@ namespace JqpdDecode
             string newPassword;
             if(optionIndex < 13)
             {
-                newPassword = (passwordV + optionIndex * computedCode).ToString("d8");
+                newPassword = (passwordBase + optionIndex * computedCode).ToString("d8");
             }
             else if(optionIndex == 13)
             {
                 try
                 {
-                    newLineNumber = int.Parse(optionLnMn.Text);
+                    newLineNumber = int.Parse(newLnMnTB.Text);
                 }
                 catch(System.Exception exce)
                 {
                     MessageBox.Show("新线号无效!");
                     return;
                 }
-                if(newLineNumber < 0 || newLineNumber > 999)
+                if(newLineNumber < 0 || newLineNumber > MaxFigure3)
                 {
                     MessageBox.Show("新线号无效!");
                     return;
                 }
-                newPassword = (passwordV - computedCode - newLineNumber).ToString("d8");
+                newPassword = (passwordBase - computedCode - newLineNumber).ToString("d8");
             }
             else
             {
                 try
                 {
-                    newMachineNumber = int.Parse(optionLnMn.Text);
+                    newMachineNumber = int.Parse(newLnMnTB.Text);
                 }
                 catch(System.Exception exce)
                 {
                     MessageBox.Show("新机台号码无效!");
                     return;
                 }
-                if(newMachineNumber < 0 || newMachineNumber > 999)
+                if(newMachineNumber < 0 || newMachineNumber > MaxFigure3)
                 {
                     MessageBox.Show("新机台号码无效!");
                     return;
                 }
-                newPassword = (passwordV - computedCode - 1000 - newMachineNumber).ToString("d8");
+                newPassword = (passwordBase - computedCode - 1000 - newMachineNumber).ToString("d8");
             }
-            if(reportProfit > 0)
+            if(reportProfit > 0 && !RecordExist(reportLineNumber,reportMachineNumber,reportProfit,reportLockCount))
             {
                 AddNewRecord();
             }
-            MessageBox.Show("密码是: " + newPassword.Substring(0, 4) + " " + newPassword.Substring(4), "打码成功!");
+            passwordTimer.Stop();
+            passwordTimer.Start();
+            labelPassword.Text = newPassword.Substring(0, 4) + " " + newPassword.Substring(4);           
         }
 
         int GetNumberOfOneBit(uint v)
@@ -195,7 +227,7 @@ namespace JqpdDecode
             TempCheck[5] ^= TempCheck[3];
 
             code = ((TempCheck[5] >> 16) ^ (TempCheck[5] & 0xffff)) % 10000;
-            passwordV = TempCheck[5] % 99000000;
+            passwordBase = TempCheck[5] % 99000000;
             return code;
         }
 
@@ -210,55 +242,15 @@ namespace JqpdDecode
             b.Text = options[optionIndex];
             if(b.Text == "线号" || b.Text.StartsWith("机号"))
             {
-                optionLnMn.Visible = true;
-                optionLnMn.Enabled = true;
+                newLnMnTB.Visible = true;
+                newLnMnTB.Enabled = true;
             }
             else
             {
-                optionLnMn.Visible = false;
-                optionLnMn.Enabled = false;
+                newLnMnTB.Visible = false;
+                newLnMnTB.Enabled = false;
             }
-        }
-
-        private void LineNumButton_Click(object sender, EventArgs e)
-        {
-            Button b = (Button)sender;
-            int s = int.Parse(b.Text);
-            s = (s + 1) % 10;
-            for(int i = 1; i <= 3; i++)
-            {
-                if(b.Name.EndsWith(i.ToString()))
-                {
-                    ln[i - 1] = s;
-                    break;
-                }
-            }
-            lineNumber = ln[0] * 100 + ln[1] * 10 + ln[2];
-            b.Text = s.ToString();
-        }
-
-        private void MachineNumButton_Click(object sender, EventArgs e)
-        {
-            int i;
-            Button b = (Button)sender;
-            int s = int.Parse(b.Text);
-            s = (s + 1) % 10;
-            for(i = 0; i < mn.Length; i++)
-            {
-                if(b.Name.EndsWith((i + 1).ToString()))
-                {
-                    mn[i] = s;
-                    break;
-                }
-            }
-            b.Text = s.ToString();
-            int sum = 0;
-            for(i = 0; i < mn.Length; i++)
-            {
-                sum = 10 * sum + mn[i];
-            }
-            machineNumber = sum;
-        }
+        }   
 
         private void DbViewButton_Click(object sender, EventArgs e)
         {
@@ -280,15 +272,12 @@ namespace JqpdDecode
             }
         }
 
-        private void TxForm_Closed(object sender, FormClosedEventArgs e)
+        private void DecodeForm_Closed(object sender, FormClosedEventArgs e)
         {
             dataBase.Close();
             dataBase.Dispose();
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
+            passwordTimer.Stop();
+            passwordTimer.Dispose();
         }
 
         private void lineNum_TextChanged(object sender, EventArgs e)
@@ -331,6 +320,7 @@ namespace JqpdDecode
                 reportMachineNumber = 0;
                 tb.Text = "";
             }
+            labelLength.Text = tb.Text.Length.ToString();
         }
 
         private void chkCode_TextChanged(object sender, EventArgs e)
