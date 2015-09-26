@@ -146,7 +146,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\DataSources\Program.datasource" />
-    <None Include="Properties\DataSources\TX_Form.datasource" />
+    <None Include="Properties\DataSources\DecodeForm.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
