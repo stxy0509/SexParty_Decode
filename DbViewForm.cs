@@ -35,8 +35,9 @@ namespace JqpdDecode
 
         private void DisplayItems()
         {
-            int i = startPos;           
+            int i = startPos,profit = 0;          
             SQLiteDataReader reader;
+
             dataTable.Items.Clear();
             SQLiteCommand command = Decode_Form.dataBase.CreateCommand();
             command.CommandText = "select * from jqpd limit " + startPos + "," + itemsPerPage + ";";
@@ -48,6 +49,7 @@ namespace JqpdDecode
             {
                 return;
             }
+            int pageTime = 0;
             while(reader.Read())
             {
                 ListViewItem item = new ListViewItem();
@@ -56,24 +58,33 @@ namespace JqpdDecode
                 item.SubItems.Add(reader.GetString(0));
                 item.SubItems.Add(reader.GetInt32(1).ToString("d3"));
                 item.SubItems.Add(reader.GetInt32(2).ToString("d8"));
-                item.SubItems.Add(reader.GetInt32(3).ToString());
+                profit = reader.GetInt32(3);
+                item.SubItems.Add(profit.ToString());
                 item.SubItems.Add(reader.GetInt32(4).ToString());
                 dataTable.Items.Add(item);
                 ++i;
+                pageTime += profit;
             }
+            reader.Close();
+            pageTimeLabel.Text = (pageTime).ToString() + "分钟";
         }
+
         private int GetRecordSize()
         {
             int size = 0;
             SQLiteDataReader reader;
             SQLiteCommand command = Decode_Form.dataBase.CreateCommand();
-            command.CommandText = "select count(*) from jqpd;";
+            command.CommandText = "select count(*),sum(profit) from jqpd;";
             try
             {            
                  reader = command.ExecuteReader();
                  if(reader.Read())
                  {
+                     int totalTime;
                      size = reader.GetInt32(0);
+                     totalTime = reader.GetInt32(1);
+                     totalTimeLabel.Text = totalTime.ToString() + "分钟";
+                     reader.Close();
                  }
             }
             catch(SQLiteException sqlex)
@@ -102,7 +113,6 @@ namespace JqpdDecode
                 }
                 catch(SQLiteException sqlex)
                 {
-
                 } 
             }
             else if(res == DialogResult.No)
