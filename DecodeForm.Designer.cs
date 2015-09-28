@@ -55,7 +55,7 @@
             this.labelLN.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelLN.Name = "labelLN";
             this.labelLN.Size = new System.Drawing.Size(40, 16);
-            this.labelLN.TabIndex = 2;
+            this.labelLN.TabIndex = 1;
             this.labelLN.Text = "线号";
             // 
             // labelGameTime
@@ -77,7 +77,7 @@
             this.makePassword.Margin = new System.Windows.Forms.Padding(4);
             this.makePassword.Name = "makePassword";
             this.makePassword.Size = new System.Drawing.Size(140, 49);
-            this.makePassword.TabIndex = 4;
+            this.makePassword.TabIndex = 14;
             this.makePassword.Text = "生成密码";
             this.makePassword.UseVisualStyleBackColor = true;
             this.makePassword.Click += new System.EventHandler(this.DoDecode_Click);
@@ -89,7 +89,7 @@
             this.optionString.Margin = new System.Windows.Forms.Padding(4);
             this.optionString.Name = "optionString";
             this.optionString.Size = new System.Drawing.Size(100, 57);
-            this.optionString.TabIndex = 25;
+            this.optionString.TabIndex = 12;
             this.optionString.Text = "20小时";
             this.optionString.UseVisualStyleBackColor = true;
             this.optionString.Click += new System.EventHandler(this.DecodeOptionButton_Click);
@@ -101,7 +101,7 @@
             this.decodeRecord.Location = new System.Drawing.Point(320, 251);
             this.decodeRecord.Name = "decodeRecord";
             this.decodeRecord.Size = new System.Drawing.Size(141, 49);
-            this.decodeRecord.TabIndex = 12;
+            this.decodeRecord.TabIndex = 15;
             this.decodeRecord.Text = "打码记录";
             this.decodeRecord.UseVisualStyleBackColor = true;
             this.decodeRecord.Click += new System.EventHandler(this.DbViewButton_Click);
@@ -111,7 +111,7 @@
             this.lockCountTB.Location = new System.Drawing.Point(232, 117);
             this.lockCountTB.Name = "lockCountTB";
             this.lockCountTB.Size = new System.Drawing.Size(100, 26);
-            this.lockCountTB.TabIndex = 23;
+            this.lockCountTB.TabIndex = 10;
             this.lockCountTB.TextChanged += new System.EventHandler(this.lockCount_TextChanged);
             // 
             // labelLockCount
@@ -122,7 +122,7 @@
             this.labelLockCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelLockCount.Name = "labelLockCount";
             this.labelLockCount.Size = new System.Drawing.Size(72, 16);
-            this.labelLockCount.TabIndex = 2;
+            this.labelLockCount.TabIndex = 4;
             this.labelLockCount.Text = "打码次数";
             // 
             // lineNumberTB
@@ -130,7 +130,7 @@
             this.lineNumberTB.Location = new System.Drawing.Point(232, 14);
             this.lineNumberTB.Name = "lineNumberTB";
             this.lineNumberTB.Size = new System.Drawing.Size(100, 26);
-            this.lineNumberTB.TabIndex = 18;
+            this.lineNumberTB.TabIndex = 7;
             this.lineNumberTB.TextChanged += new System.EventHandler(this.lineNum_TextChanged);
             // 
             // labelMachineNum
@@ -139,7 +139,7 @@
             this.labelMachineNum.Location = new System.Drawing.Point(144, 89);
             this.labelMachineNum.Name = "labelMachineNum";
             this.labelMachineNum.Size = new System.Drawing.Size(72, 16);
-            this.labelMachineNum.TabIndex = 19;
+            this.labelMachineNum.TabIndex = 3;
             this.labelMachineNum.Text = "机台号码";
             // 
             // labelCheckCode
@@ -148,7 +148,7 @@
             this.labelCheckCode.Location = new System.Drawing.Point(144, 159);
             this.labelCheckCode.Name = "labelCheckCode";
             this.labelCheckCode.Size = new System.Drawing.Size(56, 16);
-            this.labelCheckCode.TabIndex = 20;
+            this.labelCheckCode.TabIndex = 5;
             this.labelCheckCode.Text = "校验码";
             // 
             // profitTB
@@ -156,7 +156,7 @@
             this.profitTB.Location = new System.Drawing.Point(232, 47);
             this.profitTB.Name = "profitTB";
             this.profitTB.Size = new System.Drawing.Size(100, 26);
-            this.profitTB.TabIndex = 21;
+            this.profitTB.TabIndex = 8;
             this.profitTB.TextChanged += new System.EventHandler(this.profit_TextChanged);
             // 
             // machineNumTB
@@ -164,7 +164,7 @@
             this.machineNumTB.Location = new System.Drawing.Point(232, 82);
             this.machineNumTB.Name = "machineNumTB";
             this.machineNumTB.Size = new System.Drawing.Size(100, 26);
-            this.machineNumTB.TabIndex = 22;
+            this.machineNumTB.TabIndex = 9;
             this.machineNumTB.TextChanged += new System.EventHandler(this.machineNum_TextChanged);
             // 
             // chkCodeTB
@@ -172,7 +172,7 @@
             this.chkCodeTB.Location = new System.Drawing.Point(232, 149);
             this.chkCodeTB.Name = "chkCodeTB";
             this.chkCodeTB.Size = new System.Drawing.Size(100, 26);
-            this.chkCodeTB.TabIndex = 24;
+            this.chkCodeTB.TabIndex = 11;
             this.chkCodeTB.TextChanged += new System.EventHandler(this.chkCode_TextChanged);
             // 
             // newLnMnTB
@@ -181,7 +181,7 @@
             this.newLnMnTB.Location = new System.Drawing.Point(337, 199);
             this.newLnMnTB.Name = "newLnMnTB";
             this.newLnMnTB.Size = new System.Drawing.Size(100, 26);
-            this.newLnMnTB.TabIndex = 26;
+            this.newLnMnTB.TabIndex = 13;
             this.newLnMnTB.Visible = false;
             // 
             // labelOption
@@ -190,7 +190,7 @@
             this.labelOption.Location = new System.Drawing.Point(144, 202);
             this.labelOption.Name = "labelOption";
             this.labelOption.Size = new System.Drawing.Size(72, 16);
-            this.labelOption.TabIndex = 27;
+            this.labelOption.TabIndex = 6;
             this.labelOption.Text = "打码选项";
             // 
             // labelPassword
@@ -202,7 +202,7 @@
             this.labelPassword.Location = new System.Drawing.Point(88, 307);
             this.labelPassword.Name = "labelPassword";
             this.labelPassword.Size = new System.Drawing.Size(0, 29);
-            this.labelPassword.TabIndex = 28;
+            this.labelPassword.TabIndex = 16;
             // 
             // labelLength
             // 
@@ -210,7 +210,7 @@
             this.labelLength.Location = new System.Drawing.Point(338, 89);
             this.labelLength.Name = "labelLength";
             this.labelLength.Size = new System.Drawing.Size(0, 16);
-            this.labelLength.TabIndex = 29;
+            this.labelLength.TabIndex = 17;
             // 
             // Decode_Form
             // 

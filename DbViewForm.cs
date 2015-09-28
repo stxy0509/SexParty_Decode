@@ -30,7 +30,11 @@ namespace JqpdDecode
             if(totalSize > 0)
             {
                 DisplayItems();
-            }           
+            }
+            else
+            {
+                pageTimeLabel.Text = "0分钟";
+            }
         }
 
         private void DisplayItems()
@@ -72,6 +76,7 @@ namespace JqpdDecode
         private int GetRecordSize()
         {
             int size = 0;
+            int totalTime = 0;
             SQLiteDataReader reader;
             SQLiteCommand command = Decode_Form.dataBase.CreateCommand();
             command.CommandText = "select count(*),sum(profit) from jqpd;";
@@ -79,11 +84,12 @@ namespace JqpdDecode
             {            
                  reader = command.ExecuteReader();
                  if(reader.Read())
-                 {
-                     int totalTime;
+                 {                   
                      size = reader.GetInt32(0);
-                     totalTime = reader.GetInt32(1);
-                     totalTimeLabel.Text = totalTime.ToString() + "分钟";
+                     if(size > 0)
+                     {
+                        totalTime = reader.GetInt32(1);
+                     }                                     
                      reader.Close();
                  }
             }
@@ -92,6 +98,7 @@ namespace JqpdDecode
                 command.CommandText = "create table jqpd(time text,ln int,mn int,profit int,lockCount int);";
                 command.ExecuteNonQuery();
             }
+            totalTimeLabel.Text = totalTime.ToString() + "分钟";
             return size;
         }
 

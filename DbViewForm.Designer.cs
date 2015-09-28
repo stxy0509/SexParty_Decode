@@ -42,7 +42,7 @@
             // 
             // dataTable
             // 
-            this.dataTable.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dataTable.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dataTable.Location = new System.Drawing.Point(5, 73);
             this.dataTable.Margin = new System.Windows.Forms.Padding(5);
             this.dataTable.Name = "dataTable";
@@ -66,7 +66,7 @@
             this.prevPage.Location = new System.Drawing.Point(408, 2);
             this.prevPage.Name = "prevPage";
             this.prevPage.Size = new System.Drawing.Size(84, 30);
-            this.prevPage.TabIndex = 2;
+            this.prevPage.TabIndex = 4;
             this.prevPage.Text = "上一页";
             this.prevPage.UseVisualStyleBackColor = true;
             this.prevPage.Click += new System.EventHandler(this.prevPage_Click);
@@ -76,7 +76,7 @@
             this.nextPage.Location = new System.Drawing.Point(505, 3);
             this.nextPage.Name = "nextPage";
             this.nextPage.Size = new System.Drawing.Size(81, 29);
-            this.nextPage.TabIndex = 3;
+            this.nextPage.TabIndex = 5;
             this.nextPage.Text = "下一页";
             this.nextPage.UseVisualStyleBackColor = true;
             this.nextPage.Click += new System.EventHandler(this.nextPage_Click);
@@ -96,7 +96,7 @@
             this.lastPage.Location = new System.Drawing.Point(249, 2);
             this.lastPage.Name = "lastPage";
             this.lastPage.Size = new System.Drawing.Size(97, 30);
-            this.lastPage.TabIndex = 2;
+            this.lastPage.TabIndex = 3;
             this.lastPage.Text = "最后一页";
             this.lastPage.UseVisualStyleBackColor = true;
             this.lastPage.Click += new System.EventHandler(this.lastPage_Click);
@@ -106,7 +106,7 @@
             this.totalTimeButton.Location = new System.Drawing.Point(17, 38);
             this.totalTimeButton.Name = "totalTimeButton";
             this.totalTimeButton.Size = new System.Drawing.Size(120, 27);
-            this.totalTimeButton.TabIndex = 4;
+            this.totalTimeButton.TabIndex = 6;
             this.totalTimeButton.Text = "总打码时间";
             this.totalTimeButton.UseVisualStyleBackColor = true;
             // 
@@ -115,7 +115,7 @@
             this.pageTimeButton.Location = new System.Drawing.Point(299, 38);
             this.pageTimeButton.Name = "pageTimeButton";
             this.pageTimeButton.Size = new System.Drawing.Size(137, 27);
-            this.pageTimeButton.TabIndex = 5;
+            this.pageTimeButton.TabIndex = 8;
             this.pageTimeButton.Text = "本页打码时间";
             this.pageTimeButton.UseVisualStyleBackColor = true;
             // 
@@ -126,7 +126,7 @@
             this.totalTimeLabel.Location = new System.Drawing.Point(147, 41);
             this.totalTimeLabel.Name = "totalTimeLabel";
             this.totalTimeLabel.Size = new System.Drawing.Size(0, 20);
-            this.totalTimeLabel.TabIndex = 6;
+            this.totalTimeLabel.TabIndex = 7;
             // 
             // pageTimeLabel
             // 
@@ -135,7 +135,7 @@
             this.pageTimeLabel.Location = new System.Drawing.Point(442, 41);
             this.pageTimeLabel.Name = "pageTimeLabel";
             this.pageTimeLabel.Size = new System.Drawing.Size(0, 20);
-            this.pageTimeLabel.TabIndex = 7;
+            this.pageTimeLabel.TabIndex = 9;
             // 
             // DbViewForm
             // 
@@ -152,7 +152,7 @@
             this.Controls.Add(this.prevPage);
             this.Controls.Add(this.clearRecord);
             this.Controls.Add(this.dataTable);
-            this.Font = new System.Drawing.Font("SimSun", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("宋体", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "DbViewForm";
             this.Text = "打码记录";
