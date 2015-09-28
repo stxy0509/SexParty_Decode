@@ -117,6 +117,8 @@ namespace JqpdDecode
                 {
                     command.ExecuteNonQuery();
                     dataTable.Items.Clear();
+                    totalTimeLabel.Text = "0分钟";
+                    pageTimeLabel.Text = "0分钟";
                 }
                 catch(SQLiteException sqlex)
                 {
