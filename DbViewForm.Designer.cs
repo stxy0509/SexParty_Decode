@@ -42,11 +42,11 @@
             // 
             // dataTable
             // 
-            this.dataTable.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dataTable.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dataTable.Location = new System.Drawing.Point(5, 73);
             this.dataTable.Margin = new System.Windows.Forms.Padding(5);
             this.dataTable.Name = "dataTable";
-            this.dataTable.Size = new System.Drawing.Size(609, 518);
+            this.dataTable.Size = new System.Drawing.Size(705, 518);
             this.dataTable.TabIndex = 0;
             this.dataTable.UseCompatibleStateImageBehavior = false;
             // 
@@ -141,7 +141,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(616, 464);
+            this.ClientSize = new System.Drawing.Size(711, 464);
             this.Controls.Add(this.pageTimeLabel);
             this.Controls.Add(this.totalTimeLabel);
             this.Controls.Add(this.pageTimeButton);
@@ -152,7 +152,7 @@
             this.Controls.Add(this.prevPage);
             this.Controls.Add(this.clearRecord);
             this.Controls.Add(this.dataTable);
-            this.Font = new System.Drawing.Font("宋体", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("SimSun", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "DbViewForm";
             this.Text = "打码记录";

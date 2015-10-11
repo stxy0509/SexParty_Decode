@@ -28,24 +28,25 @@ namespace JqpdDecode
         private const int CodeFlag = 20131202;
         private SQLiteCommand command;
         public static SQLiteConnection dataBase;
-        private void AddNewRecord()
+        private void AddNewRecord(string usage)
         {
             try
             {
-                InsertRecord();
+                InsertRecord(usage);
             }
-            catch(SQLiteException sqlex)
+            catch (SQLiteException sqlex)
             {
-                command.CommandText = "create table jqpd(time text,ln int,mn int,profit int,lockCount int);";
+                command.CommandText = Program.createTableCommand;
                 command.ExecuteNonQuery();
-                InsertRecord();
+                InsertRecord(usage);
             }
         }
 
-        bool RecordExist(int ln,int mn,int profit,int count)
-        {        
+        bool RecordExist(string usage, int ln, int mn, int profit, int count)
+        {
             SQLiteDataReader reader;
             command.CommandText = "select count(*) from jqpd where ";
+            command.CommandText += "usage = " + "\"" + usage + "\"" + " AND ";
             command.CommandText += "ln = " + ln + " AND ";
             command.CommandText += "mn = " + mn + " AND ";
             command.CommandText += "profit = " + profit + " AND ";
@@ -53,23 +54,27 @@ namespace JqpdDecode
             try
             {
                 reader = command.ExecuteReader();
-                if(reader.Read())
+                if (reader.Read())
                 {
-                    return reader.GetInt32(0) > 0;
+                    bool exist = reader.GetInt32(0) > 0;
+                    reader.Close();
+                    return exist;
                 }
             }
-            catch(SQLiteException sqlex)
+            catch (SQLiteException sqlex)
             {
-                command.CommandText = "create table jqpd(time text,ln int,mn int,profit int,lockCount int);";
+                command.CommandText = Program.createTableCommand;
                 command.ExecuteNonQuery();
             }
             return false;
         }
 
-        private void InsertRecord()
+        private void InsertRecord(string usage)
         {
             string tempString = "insert into jqpd values(datetime('now','localtime'),";
-            command.CommandText = tempString + reportLineNumber + "," +
+            command.CommandText = tempString +
+                "\"" + usage + "\"" + ',' +
+                reportLineNumber + "," +
                 reportMachineNumber + "," +
                 reportProfit + "," +
                 reportLockCount + ");";
@@ -83,7 +88,7 @@ namespace JqpdDecode
             passwordTimer.Interval = 6000;
             passwordTimer.Tick += new EventHandler(PasswordTimeOver);
         }
-    
+
         private void PasswordTimeOver(object sender, EventArgs e)
         {
             passwordTimer.Stop();
@@ -101,64 +106,71 @@ namespace JqpdDecode
 
         private void DoDecode_Click(object sender, EventArgs e)
         {
-            if(lineNumberTB.Text == "" || profitTB.Text == "" || machineNumTB.Text == "" ||
+            if (lineNumberTB.Text == "" || profitTB.Text == "" || machineNumTB.Text == "" ||
                 lockCountTB.Text == "" || chkCodeTB.Text == "")
             {
                 MessageBox.Show("部分数据空白，请输入!");
                 return;
             }
-            if(reportLineNumber < 0 || reportLineNumber > MaxFigure3)
+            if (reportLineNumber < 0 || reportLineNumber > MaxFigure3)
             {
                 MessageBox.Show("输入的线号无效，请检查数据!");
                 return;
             }
-            if(reportMachineNumber < 0 || reportMachineNumber > 99999999)
+            if (reportMachineNumber < 0 || reportMachineNumber > 99999999)
             {
                 MessageBox.Show("机台号码无效，请检查数据!");
                 return;
             }
-            if(reportProfit < 0)
+            if (reportProfit < 0)
             {
                 MessageBox.Show("总游戏时间不能小于0，请检查数据!");
                 return;
             }
-            if(reportLockCount < 0)
+            if (reportLockCount < 0)
             {
                 MessageBox.Show("打码次数不能小于0，请检查数据!");
                 return;
             }
-            if(reportChkCode < 0)
+            if (reportChkCode < 0)
             {
                 MessageBox.Show("校验码不能小于0，请检查数据!");
                 return;
             }
             uint computedCode = ComputeCheckCode();
-            if(computedCode != reportChkCode)
+            if (computedCode != reportChkCode)
             {
                 MessageBox.Show("非法数据，校验错误，请检查数据!");
                 return;
             }
-            string newPassword;
-            if(optionIndex < 13)
+            string newPassword, usage;
+            if (optionIndex < 11)
             {
+                usage = "普通打码";
                 newPassword = (passwordBase + optionIndex * computedCode).ToString("d8");
             }
-            else if(optionIndex == 13)
+            else if (optionIndex < 13)
+            {
+                usage = options[optionIndex];
+                newPassword = (passwordBase + optionIndex * computedCode).ToString("d8");
+            }
+            else if (optionIndex == 13)
             {
                 try
                 {
                     newLineNumber = int.Parse(newLnMnTB.Text);
                 }
-                catch(System.Exception exce)
+                catch (System.Exception exce)
                 {
                     MessageBox.Show("新线号无效!");
                     return;
                 }
-                if(newLineNumber < 0 || newLineNumber > MaxFigure3)
+                if (newLineNumber < 0 || newLineNumber > MaxFigure3)
                 {
                     MessageBox.Show("新线号无效!");
                     return;
                 }
+                usage = "线号" + newLineNumber.ToString("d3");
                 newPassword = (passwordBase - computedCode - newLineNumber).ToString("d8");
             }
             else
@@ -167,33 +179,35 @@ namespace JqpdDecode
                 {
                     newMachineNumber = int.Parse(newLnMnTB.Text);
                 }
-                catch(System.Exception exce)
+                catch (System.Exception exce)
                 {
                     MessageBox.Show("新机台号码无效!");
                     return;
                 }
-                if(newMachineNumber < 0 || newMachineNumber > MaxFigure3)
+                if (newMachineNumber < 0 || newMachineNumber > MaxFigure3)
                 {
                     MessageBox.Show("新机台号码无效!");
                     return;
                 }
+                usage = "机号" + newMachineNumber.ToString("d3");
                 newPassword = (passwordBase - computedCode - 1000 - newMachineNumber).ToString("d8");
             }
-            if(reportProfit > 0 && !RecordExist(reportLineNumber,reportMachineNumber,reportProfit,reportLockCount))
+            if ((reportProfit > 0 || optionIndex >= 11) &&
+                !RecordExist(usage, reportLineNumber, reportMachineNumber, reportProfit, reportLockCount))
             {
-                AddNewRecord();
+                AddNewRecord(usage);
             }
             passwordTimer.Stop();
             passwordTimer.Start();
-            labelPassword.Text = newPassword.Substring(0, 4) + " " + newPassword.Substring(4);           
+            labelPassword.Text = newPassword.Substring(0, 4) + " " + newPassword.Substring(4);
         }
 
         int GetNumberOfOneBit(uint v)
         {
             int n = 0;
-            for(int i = 0; i < 32; i++)
+            for (int i = 0; i < 32; i++)
             {
-                if((v & (1 << i)) > 0)
+                if ((v & (1 << i)) > 0)
                 {
                     ++n;
                 }
@@ -203,7 +217,7 @@ namespace JqpdDecode
 
         uint ComputeCheckCode()
         {
-            uint temp,code = 0;
+            uint temp, code = 0;
             uint[] TempCheck = new uint[6];
 
             temp = (uint)(reportProfit);
@@ -235,12 +249,12 @@ namespace JqpdDecode
         {
             Button b = (Button)sender;
             ++optionIndex;
-            if(optionIndex >= options.Length)
+            if (optionIndex >= options.Length)
             {
                 optionIndex = 0;
             }
             b.Text = options[optionIndex];
-            if(b.Text == "线号" || b.Text.StartsWith("机号"))
+            if (b.Text == "线号" || b.Text.StartsWith("机号"))
             {
                 newLnMnTB.Visible = true;
                 newLnMnTB.Enabled = true;
@@ -250,7 +264,7 @@ namespace JqpdDecode
                 newLnMnTB.Visible = false;
                 newLnMnTB.Enabled = false;
             }
-        }   
+        }
 
         private void DbViewButton_Click(object sender, EventArgs e)
         {
@@ -265,7 +279,7 @@ namespace JqpdDecode
             {
                 reportLockCount = int.Parse(tb.Text);
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 reportLockCount = 0;
                 tb.Text = "";
@@ -285,9 +299,9 @@ namespace JqpdDecode
             TextBox tb = (TextBox)sender;
             try
             {
-                reportLineNumber = int.Parse(tb.Text);               
+                reportLineNumber = int.Parse(tb.Text);
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 reportLineNumber = 0;
                 tb.Text = "";
@@ -301,7 +315,7 @@ namespace JqpdDecode
             {
                 reportProfit = int.Parse(tb.Text);
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 reportProfit = 0;
                 tb.Text = "";
@@ -315,7 +329,7 @@ namespace JqpdDecode
             {
                 reportMachineNumber = int.Parse(tb.Text);
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 reportMachineNumber = 0;
                 tb.Text = "";
@@ -330,7 +344,7 @@ namespace JqpdDecode
             {
                 reportChkCode = int.Parse(tb.Text);
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 reportChkCode = 0;
                 tb.Text = "";
