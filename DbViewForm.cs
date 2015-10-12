@@ -107,7 +107,7 @@ namespace JqpdDecode
 
         private void clear_Click(object sender, EventArgs e)
         {
-            if (totalSize == 0)
+            if(totalSize == 0)
             {
                 return;
             }

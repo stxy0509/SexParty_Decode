@@ -97,8 +97,9 @@ namespace JqpdDecode
 
         private void DecodeForm_Load(object sender, EventArgs e)
         {
-            optionString.Text = options[optionIndex];
             newLnMnTB.Text = "";
+            optionComboBox.Items.AddRange(options);
+            optionComboBox.SelectedIndex = 0;
             dataBase = new SQLiteConnection("Data Source = decode.db");
             dataBase.Open();
             command = dataBase.CreateCommand();
@@ -106,39 +107,39 @@ namespace JqpdDecode
 
         private void DoDecode_Click(object sender, EventArgs e)
         {
-            if (lineNumberTB.Text == "" || profitTB.Text == "" || machineNumTB.Text == "" ||
+            if(lineNumberTB.Text == "" || profitTB.Text == "" || machineNumTB.Text == "" ||
                 lockCountTB.Text == "" || chkCodeTB.Text == "")
             {
                 MessageBox.Show("部分数据空白，请输入!");
                 return;
             }
-            if (reportLineNumber < 0 || reportLineNumber > MaxFigure3)
+            if(reportLineNumber < 0 || reportLineNumber > MaxFigure3)
             {
                 MessageBox.Show("输入的线号无效，请检查数据!");
                 return;
             }
-            if (reportMachineNumber < 0 || reportMachineNumber > 99999999)
+            if(reportMachineNumber < 0 || reportMachineNumber > 99999999)
             {
                 MessageBox.Show("机台号码无效，请检查数据!");
                 return;
             }
-            if (reportProfit < 0)
+            if(reportProfit < 0)
             {
                 MessageBox.Show("总游戏时间不能小于0，请检查数据!");
                 return;
             }
-            if (reportLockCount < 0)
+            if(reportLockCount < 0)
             {
                 MessageBox.Show("打码次数不能小于0，请检查数据!");
                 return;
             }
-            if (reportChkCode < 0)
+            if(reportChkCode < 0)
             {
                 MessageBox.Show("校验码不能小于0，请检查数据!");
                 return;
             }
             uint computedCode = ComputeCheckCode();
-            if (computedCode != reportChkCode)
+            if(computedCode != reportChkCode)
             {
                 MessageBox.Show("非法数据，校验错误，请检查数据!");
                 return;
@@ -245,27 +246,6 @@ namespace JqpdDecode
             return code;
         }
 
-        private void DecodeOptionButton_Click(object sender, EventArgs e)
-        {
-            Button b = (Button)sender;
-            ++optionIndex;
-            if (optionIndex >= options.Length)
-            {
-                optionIndex = 0;
-            }
-            b.Text = options[optionIndex];
-            if (b.Text == "线号" || b.Text.StartsWith("机号"))
-            {
-                newLnMnTB.Visible = true;
-                newLnMnTB.Enabled = true;
-            }
-            else
-            {
-                newLnMnTB.Visible = false;
-                newLnMnTB.Enabled = false;
-            }
-        }
-
         private void DbViewButton_Click(object sender, EventArgs e)
         {
             DbViewForm f = new DbViewForm();
@@ -348,6 +328,22 @@ namespace JqpdDecode
             {
                 reportChkCode = 0;
                 tb.Text = "";
+            }
+        }
+
+        private void optionComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox cb = (ComboBox)sender;
+            optionIndex = cb.SelectedIndex;
+            if(optionIndex >= 13)
+            {
+                newLnMnTB.Enabled = true;
+                newLnMnTB.Visible = true; 
+            }
+            else
+            {               
+                newLnMnTB.Visible = false;
+                newLnMnTB.Enabled = false;
             }
         }
     }

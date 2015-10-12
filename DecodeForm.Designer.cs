@@ -31,7 +31,6 @@
             this.labelLN = new System.Windows.Forms.Label();
             this.labelGameTime = new System.Windows.Forms.Label();
             this.makePassword = new System.Windows.Forms.Button();
-            this.optionString = new System.Windows.Forms.Button();
             this.decodeRecord = new System.Windows.Forms.Button();
             this.lockCountTB = new System.Windows.Forms.TextBox();
             this.labelLockCount = new System.Windows.Forms.Label();
@@ -45,6 +44,7 @@
             this.labelOption = new System.Windows.Forms.Label();
             this.labelPassword = new System.Windows.Forms.Label();
             this.labelLength = new System.Windows.Forms.Label();
+            this.optionComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // labelLN
@@ -81,18 +81,6 @@
             this.makePassword.Text = "生成密码";
             this.makePassword.UseVisualStyleBackColor = true;
             this.makePassword.Click += new System.EventHandler(this.DoDecode_Click);
-            // 
-            // optionString
-            // 
-            this.optionString.Font = new System.Drawing.Font("宋体", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.optionString.Location = new System.Drawing.Point(230, 182);
-            this.optionString.Margin = new System.Windows.Forms.Padding(4);
-            this.optionString.Name = "optionString";
-            this.optionString.Size = new System.Drawing.Size(100, 57);
-            this.optionString.TabIndex = 12;
-            this.optionString.Text = "20小时";
-            this.optionString.UseVisualStyleBackColor = true;
-            this.optionString.Click += new System.EventHandler(this.DecodeOptionButton_Click);
             // 
             // decodeRecord
             // 
@@ -212,12 +200,22 @@
             this.labelLength.Size = new System.Drawing.Size(0, 16);
             this.labelLength.TabIndex = 17;
             // 
+            // optionComboBox
+            // 
+            this.optionComboBox.FormattingEnabled = true;
+            this.optionComboBox.Location = new System.Drawing.Point(234, 199);
+            this.optionComboBox.Name = "optionComboBox";
+            this.optionComboBox.Size = new System.Drawing.Size(97, 24);
+            this.optionComboBox.TabIndex = 12;
+            this.optionComboBox.SelectedIndexChanged += new System.EventHandler(this.optionComboBox_SelectedIndexChanged);
+            // 
             // Decode_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(557, 373);
+            this.Controls.Add(this.optionComboBox);
             this.Controls.Add(this.labelLength);
             this.Controls.Add(this.labelPassword);
             this.Controls.Add(this.labelOption);
@@ -230,7 +228,6 @@
             this.Controls.Add(this.lineNumberTB);
             this.Controls.Add(this.lockCountTB);
             this.Controls.Add(this.decodeRecord);
-            this.Controls.Add(this.optionString);
             this.Controls.Add(this.makePassword);
             this.Controls.Add(this.labelLockCount);
             this.Controls.Add(this.labelGameTime);
@@ -258,13 +255,13 @@
         private System.Windows.Forms.Label labelCheckCode;
         private System.Windows.Forms.Label labelOption;
         public System.Windows.Forms.TextBox newLnMnTB;
-        public System.Windows.Forms.Button optionString;
         public System.Windows.Forms.TextBox lineNumberTB;
         public System.Windows.Forms.TextBox profitTB;
         public System.Windows.Forms.TextBox machineNumTB;
         public System.Windows.Forms.TextBox chkCodeTB;
         private System.Windows.Forms.Label labelPassword;
         private System.Windows.Forms.Label labelLength;
+        private System.Windows.Forms.ComboBox optionComboBox;
     }
 }
 
